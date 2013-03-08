@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="speech.js"></script>
+        <style>
+            body {
+                font-family: 'Helvetica Neue', Arial, sans-serif;
+            }
+            #text {
+                font-size: 80px;
+                letter-spacing: -3px;
+                text-align: center;
+                margin: 0;
+                position: absolute;
+                width: 100%;
+                top: 35%;
+            }
+            p {
+                font-weight: bold;
+                text-align: center;
+                font-size: 13px;
+                color: #999;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 id="text">Talk to me.</h1>
+        <p>Speech.js demo by Evan You</p>
+        <script type="text/javascript">
+            var text = document.getElementById('text')
+
+            var speech = new Speech({
+                debugging: true,
+                continuous: true,
+                interimResults: true,
+                autoRestart: true
+            })
+
+            speech
+                .on('start', function () {
+                    console.log('started')
+                })
+                .on('end', function () {
+                    console.log('ended')
+                })
+                .on('interimResult', function (msg) {
+                    text.innerHTML = msg
+                })
+                .on('finalResult', function (msg) {
+                    text.innerHTML = msg
+                })
+                .start()
+
+        </script>
+    </body>
+</html>

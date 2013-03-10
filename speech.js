@@ -102,8 +102,7 @@ window.Speech = (function (undefined) {
             debugging: false,
             continuous: false,
             interimResults: false,
-            autoRestart: false,
-            sanitizeTranscript: false
+            autoRestart: false
         }
 
         // merge user options
@@ -135,10 +134,6 @@ window.Speech = (function (undefined) {
 
             var updatedResult = e.results[e.resultIndex],
                 transcript = updatedResult[0].transcript.replace(/^\s*/, '')
-
-            if (self.options.sanitizeTranscript) {
-                transcript = sanitizeTranscript(transcript)
-            }
 
             // new sentence?
             if (e.resultIndex !== self.lastIndex) {
@@ -182,10 +177,6 @@ window.Speech = (function (undefined) {
 
     Speech.prototype.stop = function () {
         this.recognition.stop()
-    }
-
-    function sanitizeTranscript(t) {
-        return t.replace(/\bsex\b|\bass\b|\bporn\b|[a-z]\*+/g, '')
     }
 
     Events.mixTo(Speech)

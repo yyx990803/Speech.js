@@ -123,6 +123,7 @@ window.Speech = (function (undefined) {
 
         rec.continuous = self.options.continuous
         rec.interimResults = self.options.interimResults
+        if (options.lang) rec.lang = options.lang
 
         rec.onstart = function () {
             self.active = true
@@ -159,6 +160,10 @@ window.Speech = (function (undefined) {
             if (self.options.debugging) {
                 console.log(transcript + (updatedResult.isFinal ? ' (final)' : ''))
             }
+        }
+
+        rec.onerror = function (e) {
+            self.trigger('error', e)
         }
 
         rec.onend = function () {

@@ -102,8 +102,7 @@ window.Speech = (function (undefined) {
             debugging: false,
             continuous: false,
             interimResults: false,
-            autoRestart: false,
-            sanitizeTranscript: false
+            autoRestart: false
         }
 
         // merge user options
@@ -125,6 +124,7 @@ window.Speech = (function (undefined) {
 
         rec.continuous = self.options.continuous
         rec.interimResults = self.options.interimResults
+        if (options.lang) rec.lang = options.lang
 
         rec.onstart = function () {
             self.active = true
@@ -137,10 +137,6 @@ window.Speech = (function (undefined) {
 
             var updatedResult = e.results[e.resultIndex],
                 transcript = updatedResult[0].transcript.replace(/^\s*/, '')
-
-            if (self.options.sanitizeTranscript) {
-                transcript = sanitizeTranscript(transcript)
-            }
 
             // new sentence?
             if (e.resultIndex !== self.lastIndex) {
@@ -168,6 +164,10 @@ window.Speech = (function (undefined) {
             }
         }
 
+        rec.onerror = function (e) {
+            self.trigger('error', e)
+        }
+
         rec.onend = function () {
             self.active = false
             self.emit('end')
@@ -187,10 +187,6 @@ window.Speech = (function (undefined) {
         if (!this.active) return
         this.manualStopped = true
         this.recognition.stop()
-    }
-
-    function sanitizeTranscript(t) {
-        return t.replace(/\bsex\b|\bass\b|\bporn\b|[a-z]\*+/g, '')
     }
 
     Events.mixTo(Speech)

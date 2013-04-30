@@ -15,7 +15,7 @@
                 margin: 0;
                 position: absolute;
                 width: 100%;
-                top: 35%;
+                top: 40%;
             }
             p {
                 font-weight: bold;
@@ -26,8 +26,9 @@
         </style>
     </head>
     <body>
-        <h1 id="text">Talk to me.</h1>
+        <h1 id="text">Please allow access to mic.</h1>
         <p>Speech.js demo by Evan You</p>
+        <a href="https://github.com/yyx990803/Speech.js"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
         <script type="text/javascript">
             var text = document.getElementById('text')
 
@@ -40,10 +41,10 @@
 
             speech
                 .on('start', function () {
-                    console.log('started')
+                    text.innerHTML = 'Come on, talk to me.'
                 })
                 .on('end', function () {
-                    console.log('ended')
+                    text.innerHTML = 'Stopped listening.'
                 })
                 .on('interimResult', function (msg) {
                     text.innerHTML = msg

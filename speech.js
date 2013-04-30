@@ -165,7 +165,7 @@ window.Speech = (function (undefined) {
         }
 
         rec.onerror = function (e) {
-            self.trigger('error', e)
+            self.emit('error', e)
         }
 
         rec.onend = function () {

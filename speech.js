@@ -51,7 +51,7 @@ window.Speech = (function (undefined) {
         return this
     }
 
-    Events.prototype.trigger = function(events) {
+    Events.prototype.emit = function(events) {
         var cache, event, all, list, i, len, rest = [], args
         if (!(cache = this.__events)) return this
 
@@ -113,11 +113,12 @@ window.Speech = (function (undefined) {
             }
         }
 
-        this.active = false
-        this.history = []
-        this.lastIndex = -1
-        this.lastResult = ''
-        this.recognition = new webkitSpeechRecognition()
+        this.active         = false
+        this.manualStopped  = false
+        this.history        = []
+        this.lastIndex      = -1
+        this.lastResult     = ''
+        this.recognition    = new webkitSpeechRecognition()
 
         var rec = this.recognition,
             self = this
@@ -127,7 +128,8 @@ window.Speech = (function (undefined) {
 
         rec.onstart = function () {
             self.active = true
-            self.trigger('start')
+            this.manualStopped = false
+            self.emit('start')
         }
 
         rec.onresult = function (e) {
@@ -155,10 +157,10 @@ window.Speech = (function (undefined) {
             if (updatedResult.isFinal) {
                 // final sentence! we can do work!
                 self.history.push(transcript)
-                self.trigger('finalResult', transcript)
+                self.emit('finalResult', transcript)
             } else {
                 // interim, let's update stuff on screen
-                self.trigger('interimResult', transcript)
+                self.emit('interimResult', transcript)
             }
             
             if (self.options.debugging) {
@@ -168,8 +170,8 @@ window.Speech = (function (undefined) {
 
         rec.onend = function () {
             self.active = false
-            self.trigger('end')
-            if (self.options.autoRestart) {
+            self.emit('end')
+            if (self.options.autoRestart && !self.manualStopped) {
                 self.start()
             }
         }
@@ -177,10 +179,13 @@ window.Speech = (function (undefined) {
     }
 
     Speech.prototype.start = function () {
+        if (this.active) return
         this.recognition.start()
     }
 
     Speech.prototype.stop = function () {
+        if (!this.active) return
+        this.manualStopped = true
         this.recognition.stop()
     }
 

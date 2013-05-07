@@ -170,6 +170,9 @@ window.Speech = (function (undefined) {
 
         rec.onend = function () {
             self.active = false
+            self.history    = []
+            self.lastIndex  = -1
+            self.lastResult = ''
             self.emit('end')
             if (self.options.autoRestart && !self.manualStopped) {
                 self.start()

@@ -1,4 +1,4 @@
-window.Speech = (function (undefined) {
+var Speech = (function (undefined) {
 
     // https://github.com/aralejs/events ======================================
 
@@ -197,3 +197,7 @@ window.Speech = (function (undefined) {
     return Speech
 
 })()
+
+if (module && module.exports) {
+    module.exports = Speech
+}
